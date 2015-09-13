@@ -1,40 +1,34 @@
-#
-# Be sure to run `pod lib lint WebLabor.podspec' to ensure this is a
-# valid spec before submitting.
-#
-# Any lines starting with a # are optional, but their use is encouraged
-# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
-#
-
 Pod::Spec.new do |s|
   s.name             = "WebLabor"
   s.version          = "0.1.0"
-  s.summary          = "A short description of WebLabor."
+  s.summary          = "A javascript worker lives in iOS/OSX WebView"
 
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!  
   s.description      = <<-DESC
+A javascript worker lives in iOS/OSX WebView
                        DESC
 
-  s.homepage         = "https://github.com/<GITHUB_USERNAME>/WebLabor"
-  # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
+  s.homepage         = "https://github.com/huxia/WebLabor"
   s.license          = 'MIT'
-  s.author           = { "dashi" => "huizhe.xiao@gmail.com" }
-  s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/WebLabor.git", :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.author           = { "huxia" => "huizhe.xiao@gmail.com" }
+  s.source           = { :git => "https://github.com/huxia/WebLabor.git", :tag => s.version.to_s }
+  s.social_media_url = 'http://weibo.com/huizhe'
 
-  s.platform     = :ios, '7.0'
+  s.ios.deployment_target     = '7.0'
+  s.osx.deployment_target     = '10.9'
+
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes/**/*'
   s.resource_bundles = {
-    'WebLabor' => ['Pod/Assets/*.png']
+    'WebLabor' => ['Pod/Assets/*']
   }
+  s.resources = "Pod/Assets/*"
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.ios.frameworks = 'UIKit'
+  s.osx.frameworks = 'WebKit'
+
+  s.dependency 'AFNetworking', '~> 2.3'
+  s.dependency 'WebViewJavascriptBridge', '~> 4.1.4'
+  s.dependency 'RegexKitLite-NoWarning', '~> 1.1.0'
 end

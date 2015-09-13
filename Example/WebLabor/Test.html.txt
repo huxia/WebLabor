@@ -1,0 +1,28 @@
+<script>
+    alert('hi');
+    function connectWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) {
+            callback(WebViewJavascriptBridge)
+        } else {
+            document.addEventListener('WebViewJavascriptBridgeReady', function() {
+                                      callback(WebViewJavascriptBridge)
+                                      }, false)
+        }
+    };
+
+connectWebViewJavascriptBridge(function(bridge) {
+                               bridge.init(function(message, responseCallback) {
+                                           var data = {
+                                           'Javascript Responds': 'Wee!'
+                                           }
+                                           responseCallback(data)
+                                           })
+                               });
+                               connectWebViewJavascriptBridge(function(bridge){
+                                                              bridge.callHandler('wl:request', {
+                                                                                 url: 'http://dev.huizhe.name:3000/library/search/artist/for/song/%E4%BC%8D%E4%BD%B0'
+                                                                                 }, function(resp){
+                                                                                 alert(JSON.stringify(resp));
+                                                                                 });
+                                                              });
+</script>

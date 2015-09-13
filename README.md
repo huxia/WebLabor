@@ -22,7 +22,7 @@ pod "WebLabor"
 
 ## Author
 
-dashi, huizhe.xiao@gmail.com
+huxia, huizhe.xiao@gmail.com
 
 ## License
 
