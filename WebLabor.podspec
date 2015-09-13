@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.summary          = "A javascript worker lives in iOS/OSX WebView"
 
   s.description      = <<-DESC
-A javascript worker lives in iOS/OSX WebView
+A javascript worker lives in iOS/OSX WebView.
                        DESC
 
   s.homepage         = "https://github.com/huxia/WebLabor"

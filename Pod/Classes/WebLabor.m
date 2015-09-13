@@ -225,11 +225,21 @@ typedef void (^AF_FAILURE)(AFHTTPRequestOperation *operation, NSError* error);
 - (void)load:(NSURLRequest *)request domainHosts:(NSArray*)hosts domainHeaders:(NSDictionary*)domainHeaders{
     
     [self setupWebViewHost:hosts additionalHeaders:domainHeaders];
+    
+#if defined WVJB_PLATFORM_OSX
+    [[self.webView mainFrame] loadRequest:request];
+#else
     [self.webView loadRequest:request];
+#endif
 }
 - (void)loadHTML:(NSString*)html baseURL:(NSURL*)url domainHeaders:(NSDictionary*)headers{
     
     [self setupWebViewHost:@[url.host] additionalHeaders:headers];
+    
+#if defined WVJB_PLATFORM_OSX
+    [[self.webView mainFrame] loadHTMLString:html baseURL:url];
+#else
     [self.webView loadHTMLString:html baseURL:url];
+#endif
 }
 @end
