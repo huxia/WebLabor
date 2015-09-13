@@ -13,6 +13,7 @@ typedef void (^WWResponseCallback)(id responseData);
 typedef void (^WWHandler)(id data, WWResponseCallback responseCallback);
 
 @interface WebLabor : NSObject
+@property (nonatomic, readonly) BOOL isReady;
 - (void)registerHandler:(NSString*)handlerName handler:(WWHandler)handler;
 - (void)callHandler:(NSString*)handlerName;
 - (void)callHandler:(NSString*)handlerName data:(id)data;
@@ -20,5 +21,6 @@ typedef void (^WWHandler)(id data, WWResponseCallback responseCallback);
 - (void)load:(NSURLRequest*)request;
 - (void)load:(NSURLRequest*)request domainHosts:(NSArray*)hosts domainHeaders:(NSDictionary*)headers;
 - (void)loadHTML:(NSString*)html baseURL:(NSURL*)url domainHeaders:(NSDictionary*)headers;
+- (void)reload;
 + (WebViewJavascriptBridge*)configWebView:(WVJB_WEBVIEW_TYPE*)webView domainHosts:(NSArray*)hosts domainHeaders:(NSDictionary*)headers;
 @end

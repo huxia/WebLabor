@@ -12,7 +12,10 @@
 typedef void (^AF_SUCCESS)(AFHTTPRequestOperation *operation, id responseObject);
 typedef void (^AF_FAILURE)(AFHTTPRequestOperation *operation, NSError* error);
 @interface WebLabor(){
-
+    BOOL _isReady;
+    NSURLRequest* _lastRequest;
+    NSString* _lastHTML;
+    NSURL* _lastBaseURL;
 }
 @property (nonatomic, strong) WVJB_WEBVIEW_TYPE* webView;
 @property (nonatomic, strong) WebViewJavascriptBridge* bridge;
@@ -39,9 +42,12 @@ typedef void (^AF_FAILURE)(AFHTTPRequestOperation *operation, NSError* error);
 }
 
 - (void)setupWebViewHost:(NSArray*)domainHosts additionalHeaders:(NSDictionary*)domainHeaders{
-    
-    self.webView = [[WVJB_WEBVIEW_TYPE alloc] init];
-    self.bridge = [WebLabor configWebView:self.webView domainHosts:domainHosts domainHeaders:domainHeaders];
+    if (!self.webView) {
+        self.webView = [[WVJB_WEBVIEW_TYPE alloc] init];
+    }
+    if (!self.bridge) {
+        self.bridge = [WebLabor configWebView:self.webView domainHosts:domainHosts domainHeaders:domainHeaders];
+    }
 }
 + (BOOL)domainTrusted:(NSURL*)url :(NSArray*)hosts{
     NSString* urlHost = url.host.uppercaseString;
@@ -219,6 +225,14 @@ typedef void (^AF_FAILURE)(AFHTTPRequestOperation *operation, NSError* error);
     }];
     return bridge;
 }
+
+- (BOOL)isReady{
+    if (_isReady)
+        return _isReady;
+    if ([[webView stringByEvaluatingJavaScriptFromString:@"typeof WebViewJavascriptBridge == 'object'"] isEqualToString:@"true"]) _isReady = true;
+    return _isReady;
+}
+
 - (void)load:(NSURLRequest *)request{
     [self load:request domainHosts:@[request.URL.host] domainHeaders:[request isKindOfClass:[NSMutableURLRequest class]] ? ((NSMutableURLRequest*)request).allHTTPHeaderFields : nil];
 }
@@ -226,20 +240,40 @@ typedef void (^AF_FAILURE)(AFHTTPRequestOperation *operation, NSError* error);
     
     [self setupWebViewHost:hosts additionalHeaders:domainHeaders];
     
-#if defined WVJB_PLATFORM_OSX
-    [[self.webView mainFrame] loadRequest:request];
-#else
-    [self.webView loadRequest:request];
-#endif
+    _isReady = false;
+    _lastRequest = request;
+    _lastHTML = nil;
+    _lastBaseURL = nil;
+    [self reload];
 }
 - (void)loadHTML:(NSString*)html baseURL:(NSURL*)url domainHeaders:(NSDictionary*)headers{
     
     [self setupWebViewHost:@[url.host] additionalHeaders:headers];
     
+    _isReady = false;
+    _lastRequest = nil;
+    _lastHTML = html;
+    _lastBaseURL = url;
+    [self reload];
+}
+
+-(void)reload{
+    if (_lastRequest) {
+        
 #if defined WVJB_PLATFORM_OSX
-    [[self.webView mainFrame] loadHTMLString:html baseURL:url];
+        [[self.webView mainFrame] loadRequest:_lastRequest];
 #else
-    [self.webView loadHTMLString:html baseURL:url];
+        [self.webView loadRequest:_lastRequest];
 #endif
+    }else if(_lastHTML){
+        
+#if defined WVJB_PLATFORM_OSX
+        [[self.webView mainFrame] loadHTMLString:_lastHTML baseURL:_lastBaseURL];
+#else
+        [self.webView loadHTMLString:_lastHTML baseURL:_lastBaseURL];
+#endif
+    }else{
+        [NSException raise:@"NotYetLoaded" format:@"please call [webLabor load:] or [webLabor loadHTML:] first"];
+    }
 }
 @end
