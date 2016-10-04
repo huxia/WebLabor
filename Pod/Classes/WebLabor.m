@@ -44,7 +44,9 @@ typedef void (^AF_FAILURE)(AFHTTPRequestOperation *operation, NSError* error);
 - (void)setupWebViewHost:(NSArray*)domainHosts additionalHeaders:(NSDictionary*)domainHeaders{
     if (!self.webView) {
         self.webView = [[WVJB_WEBVIEW_TYPE alloc] init];
+#if defined __IPHONE_OS_VERSION_MAX_ALLOWED
         self.webView.allowsInlineMediaPlayback = true;
+#endif
     }
     if (!self.bridge) {
         self.bridge = [WebLabor configWebView:self.webView domainHosts:domainHosts domainHeaders:domainHeaders];

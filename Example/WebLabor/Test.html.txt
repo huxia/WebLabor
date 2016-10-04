@@ -1,5 +1,8 @@
 <script>
-    localStorage.setItem('test', JSON.stringify({hello:'world'}));
+    if(!localStorage.getItem('test')){
+        alert('init local storage');
+        localStorage.setItem('test', JSON.stringify({hello:'world'}));
+    }
     alert(localStorage.getItem('test'));
     function connectWebViewJavascriptBridge(callback) {
         if (window.WebViewJavascriptBridge) {
