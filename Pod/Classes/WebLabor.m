@@ -44,6 +44,7 @@ typedef void (^AF_FAILURE)(AFHTTPRequestOperation *operation, NSError* error);
 - (void)setupWebViewHost:(NSArray*)domainHosts additionalHeaders:(NSDictionary*)domainHeaders{
     if (!self.webView) {
         self.webView = [[WVJB_WEBVIEW_TYPE alloc] init];
+        self.webView.allowsInlineMediaPlayback = true;
     }
     if (!self.bridge) {
         self.bridge = [WebLabor configWebView:self.webView domainHosts:domainHosts domainHeaders:domainHeaders];
@@ -88,7 +89,6 @@ typedef void (^AF_FAILURE)(AFHTTPRequestOperation *operation, NSError* error);
         
         NSMutableDictionary* allHeaders = [[NSMutableDictionary alloc] init];
         
-        [allHeaders setObject:@"UTF-8" forKey:@"Accept-Encoding"];
         
         
         
@@ -109,7 +109,7 @@ typedef void (^AF_FAILURE)(AFHTTPRequestOperation *operation, NSError* error);
         if (paramsFile.count){
             // file
             if(!timeout) timeout = @(180);
-        }else if (params.count && !paramsFile.count) {
+        }else if (params.count && !paramsFile.count && ![method isEqualToString:@"GET"]) {
             // kv post
             if(!timeout) timeout = @(60);
             [allHeaders setObject:[NSString stringWithFormat:@"application/x-www-form-urlencoded; charset=%@", @"utf-8"] forKey:@"Content-Type"];

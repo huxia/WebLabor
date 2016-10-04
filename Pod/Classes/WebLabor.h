@@ -14,6 +14,7 @@ typedef void (^WWHandler)(id data, WWResponseCallback responseCallback);
 
 @interface WebLabor : NSObject
 @property (nonatomic, readonly) BOOL isReady;
+@property (nonatomic, readonly) WVJB_WEBVIEW_TYPE* webView;
 - (void)registerHandler:(NSString*)handlerName handler:(WWHandler)handler;
 - (void)callHandler:(NSString*)handlerName;
 - (void)callHandler:(NSString*)handlerName data:(id)data;
