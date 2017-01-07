@@ -181,6 +181,7 @@ typedef void (^AF_FAILURE)(AFHTTPRequestOperation *operation, NSError* error);
         for (NSString* k in allHeaders.allKeys) {
             [manager.requestSerializer setValue:[allHeaders objectForKey:k] forHTTPHeaderField:k];
         }
+        manager.responseSerializer.acceptableContentTypes = nil;
         if (paramsFile.count) {
             if (![method isEqualToString:@"POST"]) {
                 [NSException raise:@"WrongMethod" format:@"only allow post multipart"];
